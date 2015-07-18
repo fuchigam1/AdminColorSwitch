@@ -14,12 +14,17 @@ $this->BcBaser->js(array('AdminColorSwitch.admin/colpick'), false);
 
 <script type="text/javascript">
 $(function () {
+	var options = {
+		/* デフォルトカラー */
+		defaultColor: '333333'
+	};
+	
 	/**
 	 * 画面を開いた際にカラーコード色を入力欄のボーダーに適用する
 	 */
 	$(".color-picker").each(function() {
 		if ($(this).val()) {
-			$(this).css('border-color', '#'+$(this).val());
+			$(this).css('border-color', '#'+ $(this).val());
 		}
 	});
 
@@ -27,11 +32,25 @@ $(function () {
 	 * ツールバーの色指定欄にデフォルト色の値を入れる
 	 */
 	$("#AdminColorSwitchColorCodeReset").on('click', function(){
-		if (confirm('デフォルト色 #333333 に設定します。よろしいですか?')) {
-			$("#AdminColorSwitchColorCode").val('333333');
-			$("#AdminColorSwitchColorCode").css('border-color', '#333333');
+		if (confirm('デフォルト色 #' +options.defaultColor+ ' に設定します。よろしいですか？')) {
+			$("#AdminColorSwitchColorCode").val(options.defaultColor);
+			$("#AdminColorSwitchColorCode").css('border-color', '#'+ options.defaultColor);
+			changeColor('ToolBar', options.defaultColor);
+			changeColor('FooterInner', options.defaultColor);
 		}
 		return false;
+	});
+
+	/**
+	 * フッター色適用チェックボックスのON・OFFを反映する
+	 */
+	$("#AdminColorSwitchFlgFooter").on('click', function() {
+		if ($(this).prop('checked')) {
+			color = $("#AdminColorSwitchColorCode").val();
+			changeColor('FooterInner', color);
+		} else {
+			changeColor('FooterInner', options.defaultColor);
+		}
 	});
 
 	/**
@@ -39,17 +58,34 @@ $(function () {
 	 */
 	$("#AdminColorSwitchColorCode").colpick({
 		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('border-color','#'+hex);
+			$(el).css('border-color', '#'+ hex);
 			/* Fill the text box just if the color was set using the picker, and not the colpickSetColor function. */
 			if(!bySetColor) $(el).val(hex);
+			changeColor('ToolBar', hex);
+			if ($("#AdminColorSwitchFlgFooter").prop('checked')) {
+				changeColor('FooterInner', hex);
+			}
 		},
 		onSubmit:function(hsb,hex,rgb,el) {
-			$(el).css('border-color','#'+hex);
+			$(el).css('border-color', '#'+ hex);
 			$(el).colpickHide();
+			changeColor('ToolBar', hex);
 		}
 	}).keyup(function(){
 		$(this).colpickSetColor(this.value);
 	});
+
+	/**
+	 * 指定id背景色を指定colorに変更する
+	 * 
+	 * @param {string} id
+	 * @param {string} color
+	 */
+	function changeColor(id, color) {
+		if (color) {
+			$("#"+ id).css('background-color', '#'+ color);
+		}
+	}
 });
 </script>
 
