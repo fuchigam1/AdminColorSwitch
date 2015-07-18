@@ -37,15 +37,18 @@ class AdminColorSwitchHelperEventListener extends BcHelperEventListener {
  * @param CakeEvent $event
  */
 	public function formAfterForm (CakeEvent $event) {
-		$View = $event->subject();
 		if (!BcUtil::isAdminSystem()) {
 			return;
 		}
 		
-		if (in_array($View->request->params['controller'], $this->targetControllers)) {
-			if (in_array($View->request->params['action'], $this->targetActions)) {
-					echo $View->element('AdminColorSwitch.admin/admin_color_switch_form');
-			}
+		$View = $event->subject();
+		
+		if (!in_array($View->request->params['controller'], $this->targetControllers)) {
+			return;
+		}
+		
+		if (in_array($View->request->params['action'], $this->targetActions)) {
+			echo $View->element('AdminColorSwitch.admin/admin_color_switch_form');
 		}
 	}
 	
