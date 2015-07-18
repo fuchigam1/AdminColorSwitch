@@ -15,11 +15,21 @@ $this->BcBaser->js(array('AdminColorSwitch.admin/colpick'), false);
 <script type="text/javascript">
 $(function () {
 	/**
+	 * 画面を開いた際にカラーコード色を入力欄のボーダーに適用する
+	 */
+	$(".color-picker").each(function() {
+		if ($(this).val()) {
+			$(this).css('border-color', '#'+$(this).val());
+		}
+	});
+
+	/**
 	 * ツールバーの色指定欄にデフォルト色の値を入れる
 	 */
-	$('#AdminColorSwitchColorCodeReset').on('click', function(){
+	$("#AdminColorSwitchColorCodeReset").on('click', function(){
 		if (confirm('デフォルト色 #333333 に設定します。よろしいですか?')) {
-			$('#AdminColorSwitchColorCode').val('333333');
+			$("#AdminColorSwitchColorCode").val('333333');
+			$("#AdminColorSwitchColorCode").css('border-color', '#333333');
 		}
 		return false;
 	});
@@ -27,14 +37,15 @@ $(function () {
 	/**
 	 * カラーピッカーを起動してツールバーの色を指定する
 	 */
-	$('#AdminColorSwitchColorCode').colpick({
-		//layout:'hex',
-		submit:0,
-		//colorScheme:'dark',
+	$("#AdminColorSwitchColorCode").colpick({
 		onChange:function(hsb,hex,rgb,el,bySetColor) {
 			$(el).css('border-color','#'+hex);
-			// Fill the text box just if the color was set using the picker, and not the colpickSetColor function.
+			/* Fill the text box just if the color was set using the picker, and not the colpickSetColor function. */
 			if(!bySetColor) $(el).val(hex);
+		},
+		onSubmit:function(hsb,hex,rgb,el) {
+			$(el).css('border-color','#'+hex);
+			$(el).colpickHide();
 		}
 	}).keyup(function(){
 		$(this).colpickSetColor(this.value);
@@ -47,7 +58,7 @@ $(function () {
 	<tr>
 		<th class="col-head"><?php echo $this->BcForm->label('AdminColorSwitch.color_code', 'ツールバーの色') ?></th>
 		<td class="col-input">
-			<?php echo $this->BcForm->input('AdminColorSwitch.color_code', array('type' => 'text', 'size' => 10)) ?>
+			<?php echo $this->BcForm->input('AdminColorSwitch.color_code', array('type' => 'text', 'size' => 10, 'class' => 'color-picker')) ?>
 			&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->BcForm->input('デフォルト色に戻す', array('type' => 'button', 'id' => 'AdminColorSwitchColorCodeReset')) ?>
 			<?php echo $this->BcForm->error('AdminColorSwitch.color_code') ?>
 			&nbsp;&nbsp;&nbsp;&nbsp;
