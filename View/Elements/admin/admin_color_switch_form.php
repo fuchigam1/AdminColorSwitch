@@ -97,7 +97,7 @@ $(function () {
 			<?php echo $this->BcForm->input('AdminColorSwitch.color_code', array('type' => 'text', 'size' => 10, 'class' => 'color-picker')) ?>
 			&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->BcForm->input('デフォルト色に戻す', array('type' => 'button', 'id' => 'AdminColorSwitchColorCodeReset')) ?>
 			<?php echo $this->BcForm->error('AdminColorSwitch.color_code') ?>
-			&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;
 			<?php echo $this->BcForm->input('AdminColorSwitch.flg_footer', array('type' => 'checkbox', 'label' => 'フッター色に適用する')) ?>
 			<?php echo $this->BcForm->error('AdminColorSwitch.flg_footer') ?>
 		</td>
