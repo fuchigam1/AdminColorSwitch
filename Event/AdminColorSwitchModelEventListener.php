@@ -19,6 +19,13 @@ class AdminColorSwitchModelEventListener extends BcModelEventListener {
 	);
 	
 /**
+ * プラグインのモデル名
+ * 
+ * @var string
+ */
+	private $pluginModelName = 'UserToolbarSwitch';
+	
+/**
  * userBeforeFind
  * ユーザー情報取得の際に、AdminColorSwitch 情報も併せて取得する
  * 
@@ -27,8 +34,8 @@ class AdminColorSwitchModelEventListener extends BcModelEventListener {
 	public function userBeforeFind (CakeEvent $event) {
 		$Model = $event->subject();
 		$association = array(
-			'AdminColorSwitch' => array(
-				'className' => 'AdminColorSwitch.AdminColorSwitch',
+			$this->pluginModelName => array(
+				'className' => $this->plugin .'.'. $this->pluginModelName,
 				'foreignKey' => 'user_id'
 			)
 		);
@@ -45,14 +52,14 @@ class AdminColorSwitchModelEventListener extends BcModelEventListener {
 		$Model = $event->subject();
 		
 		// AdminColorSwitch のデータがない場合は save 処理を実施しない
-		if (!isset($Model->data['AdminColorSwitch']) || empty($Model->data['AdminColorSwitch'])) {
+		if (!isset($Model->data[$this->pluginModelName]) || empty($Model->data[$this->pluginModelName])) {
 			return;
 		}
 		
-		$saveData['AdminColorSwitch'] = $Model->data['AdminColorSwitch'];
-		$saveData['AdminColorSwitch']['user_id'] = $Model->id;
-		if (!$Model->AdminColorSwitch->save($saveData)) {
-			$this->log(sprintf('ID：%s の AdminColorSwitch の保存に失敗しました。', $Model->data['AdminColorSwitch']['id']));
+		$saveData[$this->pluginModelName] = $Model->data[$this->pluginModelName];
+		$saveData[$this->pluginModelName]['user_id'] = $Model->id;
+		if (!$Model->{$this->pluginModelName}->save($saveData)) {
+			$this->log(sprintf('ID：%s の '. $this->pluginModelName .' の保存に失敗しました。', $Model->data[$this->pluginModelName]['id']));
 		}
 	}
 	
@@ -64,13 +71,13 @@ class AdminColorSwitchModelEventListener extends BcModelEventListener {
  */
 	public function userAfterDelete (CakeEvent $event) {
 		$Model = $event->subject();
-		$data = $Model->AdminColorSwitch->find('first', array(
-			'conditions' => array('AdminColorSwitch.user_id' => $Model->id),
+		$data = $Model->{$this->pluginModelName}->find('first', array(
+			'conditions' => array($this->pluginModelName .'.user_id' => $Model->id),
 			'recursive' => -1
 		));
 		if ($data) {
-			if (!$Model->AdminColorSwitch->delete($data['AdminColorSwitch']['id'])) {
-				$this->log('ID:' . $data['AdminColorSwitch']['id'] . 'のAdminColorSwitchの削除に失敗しました。');
+			if (!$Model->{$this->pluginModelName}->delete($data[$this->pluginModelName]['id'])) {
+				$this->log('ID:' . $data[$this->pluginModelName]['id'] . 'の'. $this->pluginModelName .'の削除に失敗しました。');
 			}
 		}
 	}

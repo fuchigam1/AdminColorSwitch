@@ -39,7 +39,7 @@ class AdminColorSwitchViewEventListener extends BcViewEventListener {
 			}
 			
 			$View->start('admin_color_switch');
-			$AdminColorSwitch = $View->element('AdminColorSwitch.admin/admin_color_switch_color_code');
+			$AdminColorSwitch = $View->element($this->plugin .'.admin/admin_color_switch_color_code');
 			$View->end();
 			$View->append('css', $AdminColorSwitch);
 		}

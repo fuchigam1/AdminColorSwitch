@@ -48,7 +48,7 @@ class AdminColorSwitchHelperEventListener extends BcHelperEventListener {
 		}
 		
 		if (in_array($View->request->params['action'], $this->targetActions)) {
-			echo $View->element('AdminColorSwitch.admin/admin_color_switch_form');
+			echo $View->element($this->plugin .'.admin/admin_color_switch_form');
 		}
 	}
 	
