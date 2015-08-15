@@ -23,7 +23,7 @@ class AdminColorSwitchModelEventListener extends BcModelEventListener {
  * 
  * @var string
  */
-	private $pluginModelName = 'UserToolbarSwitch';
+	private $pluginModelName = 'AdminColorSwitch';
 	
 /**
  * userBeforeFind
